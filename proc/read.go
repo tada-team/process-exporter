@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/prometheus/procfs"
@@ -372,8 +373,44 @@ func (p *proccache) GetStatic() (Static, error) {
 		return Static{}, err
 	}
 
+	name := stat.Comm
+
+	switch stat.Comm {
+	case "gotada":
+		{
+			suffix := ""
+			for i, s := range cmdline {
+				if i == 0 || strings.Index(s, "-") != 0 {
+					continue
+				}
+				suffix = strings.Replace(s, "-", "", -1)
+				suffix = strings.Replace(suffix, " ", "_", -1)
+			}
+
+			if suffix != "" {
+				name += "_" + suffix
+				break
+			}
+		}
+	case "python3.6":
+		{
+			suffix := ""
+			for i, s := range cmdline {
+				if i == 0 {
+					continue
+				}
+				suffix = strings.Replace(s, " ", "_", -1)
+			}
+
+			if suffix != "" {
+				name += "_" + suffix
+				break
+			}
+		}
+	}
+
 	return Static{
-		Name:         stat.Comm,
+		Name:         name,
 		Cmdline:      cmdline,
 		ParentPid:    stat.PPID,
 		StartTime:    startTime,
