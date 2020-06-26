@@ -385,11 +385,11 @@ func (p *proccache) GetStatic() (Static, error) {
 				}
 				suffix = strings.Replace(s, "-", "", -1)
 				suffix = strings.Replace(suffix, " ", "_", -1)
+				break
 			}
 
 			if suffix != "" {
 				name += "_" + suffix
-				break
 			}
 		}
 	case "python3.6":
@@ -400,11 +400,11 @@ func (p *proccache) GetStatic() (Static, error) {
 					continue
 				}
 				suffix = strings.Replace(s, " ", "_", -1)
+				break
 			}
 
 			if suffix != "" {
 				name += "_" + suffix
-				break
 			}
 		}
 	}
