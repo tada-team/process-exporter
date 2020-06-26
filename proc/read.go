@@ -395,12 +395,11 @@ func (p *proccache) GetStatic() (Static, error) {
 	case "python3.6":
 		{
 			suffix := ""
-			for i, s := range cmdline {
-				if i == 0 {
-					continue
+			for _, s := range cmdline {
+				if s == "run_workers" || s == "runserver" || s == "run_api_server" {
+					suffix = s
+					break
 				}
-				suffix = strings.Replace(s, " ", "_", -1)
-				break
 			}
 
 			if suffix != "" {
